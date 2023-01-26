@@ -7,10 +7,13 @@ export const createRoom= async (req,res,next)=>{
      
     const hotelId= req.params.hotelid;
     const newRoom= new Room(req.body)
+    console.log("rooms")
 
     try{
+        console.log("room1")
         const savedRoom=await newRoom.save()
         try{
+            console.log("room2")
             await Hotel.findByIdAndUpdate(hotelId,{
                 $push:{rooms:savedRoom._id},
             })

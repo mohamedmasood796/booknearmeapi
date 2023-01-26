@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
+
 dotenv.config()
 
 
@@ -41,7 +42,7 @@ export const login = async (req, res, next) => {
         const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, `${process.env.JWT}`)
 
         const { password, isAdmin, ...otherDetails } = user._doc;
-        res.cookie("access_token", token, { httpOnly: true, }).status(200).json({ ...otherDetails ,status:true,userExist: true,message:'user logined'})
+        res.cookie("access_token", token, { httpOnly: true, }).status(200).json({ ...otherDetails,token ,status:true,userExist: true,message:'user logined'})
         // res.status(200).json({...otherDetails}) 
     } catch (err) {
         console.log("haikoo")
