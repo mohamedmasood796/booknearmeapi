@@ -6,6 +6,7 @@ import authRoute from "./routers/auth.js"
 import userRoute from "./routers/users.js"
 import hotelsRoute from "./routers/hotels.js"
 import roomsRoute from "./routers/rooms.js"
+import adminRoute from "./routers/admin.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 const app = express()
@@ -37,6 +38,7 @@ app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute)
 app.use("/api/hotels", hotelsRoute)
 app.use("/api/rooms", roomsRoute)
+app.use("/api/admin", adminRoute)
 
 
 app.use((err, req, res, next) => {
