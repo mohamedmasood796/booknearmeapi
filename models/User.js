@@ -12,6 +12,18 @@ const userSchema = new mongoose.Schema({
     require:true,
     unique:true
   },
+  country:{
+    type:String,
+  },
+  img:{
+    type:String,
+  },
+  city:{
+    type:String,
+  },
+  phone:{
+    type:Number,
+  },
   password: {
     type: String,
     require:true
