@@ -53,11 +53,15 @@ export const getHotel = async (req, res, next) => {
 
 //get all hotels
 export const getHotels = async (req, res, next) => {
+    console.log(1111111111)
     const { min, max, ...others } = req.query
     try {
+        console.log(2222222222)
         const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 999 } }).limit(req.query.limit)
+        console.log(3333333333333)
         res.status(200).json(hotels)
     } catch (err) {
+        console.log(444444444444)
         next(err)
     }
 }

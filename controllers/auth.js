@@ -22,6 +22,10 @@ export const register = async (req, res, next) => {
                 password: hash,
             })
             await newUser.save()
+
+            const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, `${process.env.JWT}`)
+            res.cookie("access_token", token, { httpOnly: true, }).status(200).json({ ...otherDetails, token, status: true, userExist: true, message: 'user account created' })
+
             res.status(200).json({ status: true, message: "User has been created" })
         }
     } catch (err) {

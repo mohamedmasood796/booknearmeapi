@@ -30,7 +30,7 @@ router.delete('/:id' ,verifyUser , deleteUser)
 router.put('/:id',verifyUser , getUser)
 
 //GET ALL 
-router.put('/',verifyAdmin,getUsers)
+router.get('/',getUsers)
 
 
 
