@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type:Boolean,
     default:false 
   },
+  verify:{
+    type:Boolean,
+    default:false
+  }
   // verified:{
   //   type:Boolean,
   //   default:false 

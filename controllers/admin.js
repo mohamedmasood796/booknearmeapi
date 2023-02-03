@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
+import User from "../models/User.js";
 
 dotenv.config()
 
@@ -30,3 +31,26 @@ export const adminlogin = async (req, res, next) => {
         next(err)
     }
 }
+
+export const changeStatus = (req,res,next) => {
+    console.log("naju1")
+    const { Status, userId } = req.body;
+    console.log(Status,"status")
+    console.log(userId,"userId")    
+    try {
+      void User
+        .updateOne(
+          { _id: userId },
+          {
+            $set: {
+                verify: Status,
+            },
+          }
+        )
+        .then((date) => {
+          res.status(200).send({ Status: true });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
