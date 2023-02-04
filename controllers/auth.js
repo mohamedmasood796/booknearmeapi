@@ -23,7 +23,7 @@ export const register = async (req, res, next) => {
                 password: hash,
             }).save()
             console.log(newUser,"new user details");
-            const url=`http://localhost:3000/verify/${newUser._id}`
+            const url=`http://localhost:3000/verify?id=${newUser._id}`
             console.log(req.body.email);
            await sendEmail(req.body.email, "click to verify your account", url)
 
@@ -65,15 +65,16 @@ export const login = async (req, res, next) => {
 export const verifyUser= async (req, res, next) => {
 
   const user=await User.findOne({_id:req.params.id})
+  console.log(user,"ahahahah")
 
   if(!user) return res.json({ status: false, message: "please register" }) 
   if(user){
-    User.findByIdAndUpdate({_id:req.params.id},{
+    await User.findByIdAndUpdate({_id:req.params.id},{
         $set:{
             verify:true
         }
     })
-    res.json({ status: true, message: "verify" }) 
+    res.json({ status:true, message: "verify" }) 
   }
 
 }
