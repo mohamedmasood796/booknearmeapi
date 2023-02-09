@@ -10,7 +10,7 @@ const router =express.Router()
 
 
 //create
-router.post("/",verifyAdmin,createHotel)
+router.post("/",createHotel)
 
 //update
 

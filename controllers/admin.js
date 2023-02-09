@@ -33,17 +33,14 @@ export const adminlogin = async (req, res, next) => {
 }
 
 export const changeStatus = (req,res,next) => {
-    console.log("naju1")
-    const { Status, userId } = req.body;
-    console.log(Status,"status")
-    console.log(userId,"userId")    
+    const { Status, e } = req.body;
     try {
       void User
         .updateOne(
-          { _id: userId },
+          { _id: e },
           {
             $set: {
-                verify: Status,
+                isBlock: Status,
             },
           }
         )

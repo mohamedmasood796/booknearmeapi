@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     require:true
   },
 
-  isAdmin:{
+  isBlock:{
     type:Boolean,
     default:false 
   },
