@@ -4,6 +4,7 @@ import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import { sendEmail } from "../utils/sentMail.js";
+import {generateToken} from "../utils/jwt.js"
 
 dotenv.config()
 
@@ -27,7 +28,8 @@ export const register = async (req, res, next) => {
             console.log(req.body.email);
            await sendEmail(req.body.email, "click to verify your account", url)
 
-            const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, `${process.env.JWT}`)
+            // const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, `${process.env.JWT}`)
+            const token = await generateToken({ id: user._id.toString() });
             res.cookie("access_token", token, { httpOnly: true, }).status(200).json({  token, status: true, userExist: true, message: 'user account created' })
 
             res.status(200).json({ status: true, message: "User has been created" })
@@ -50,8 +52,10 @@ export const login = async (req, res, next) => {
         if (!isPasswordCorrect) return res.json({ status: false, message: "wrong password or username" })
         // next(createError(400, "Wrong password or username"))
 
-        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, `${process.env.JWT}`)
+        // const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, `${process.env.JWT}`)
 
+        const token = await generateToken({ id: user._id.toString() });
+        console.log(token,"naju")
         const { password, isAdmin, ...otherDetails } = user._doc;
         res.cookie("access_token", token, { httpOnly: true, }).status(200).json({ ...otherDetails, token, status: true, userExist: true, message: 'user logined' })
         // res.status(200).json({...otherDetails}) 

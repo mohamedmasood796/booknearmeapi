@@ -109,6 +109,7 @@ export const getHotelRooms = async (req, res, next) => {
     console.log("rooms adding")
     try {
         console.log("rooms try adding")
+        console.log(req.params.id,"rooms try adding")
         
         const hotel =await Hotel.findById(req.params.id)
         console.log(" try adding",hotel)
