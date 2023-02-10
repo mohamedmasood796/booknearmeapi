@@ -3,7 +3,9 @@ import Hotel from "../models/Hotel.js"
 import Room from "../models/Room.js"
 
 export const createHotel = async (req, res, next) => {
+    console.log(req.body,"hai body")
     const newHotel = new Hotel(req.body);
+    console.log(newHotel,"newHotels")
 
     try {
         const savedHotel = await newHotel.save()

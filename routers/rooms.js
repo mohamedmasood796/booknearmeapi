@@ -13,11 +13,12 @@ router.post("/:hotelid",createRoom)
 //update
 
 router.put("/availability/:roomId/:roomNumberId" ,updateRoomAvailability)
-router.put("/:id",verifyAdmin ,updateRoom)
+router.put("/:id" ,updateRoom)
+// router.put("/:id",verifyAdmin ,updateRoom)
 
 //delect
 
-router.delete("/:id/:hotelid",verifyAdmin,deleteRoom)
+router.delete("/:id/:hotelid",deleteRoom)
 
 //get
 
