@@ -4,6 +4,7 @@ import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import User from "../models/User.js";
+import {generateToken} from "../utils/jwt.js"
 
 dotenv.config()
 
@@ -21,7 +22,7 @@ export const adminlogin = async (req, res, next) => {
         if (!isPasswordCorrect) return res.json({ status: false, message: "wrong password or username" })
         // next(createError(400, "Wrong password or username"))
 
-        const token = jwt.sign({ id: admin._id, isAdmin: admin.isAdmin }, `${process.env.JWT}`)
+        const token = await generateToken({ id: user._id.toString() });
 
         // const { password, isAdmin, ...otherDetails } = user._doc;
         res.cookie("access_token", token, { httpOnly: true, }).status(200).json({  token, status: true, message: 'admin logined' })

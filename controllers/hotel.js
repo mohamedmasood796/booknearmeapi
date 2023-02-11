@@ -9,6 +9,7 @@ export const createHotel = async (req, res, next) => {
 
     try {
         const savedHotel = await newHotel.save()
+        console.log(savedHotel,"saved hoterel")
         res.status(200).json(savedHotel)
     } catch (err) {
         next(err)
@@ -47,6 +48,7 @@ export const getHotel = async (req, res, next) => {
     console.log("hello", req.params.id)
     try {
         const hotel = await Hotel.findById(req.params.id)
+        console.log(hotel);
         res.status(200).json(hotel)
     } catch (err) {
         next(err)
@@ -56,11 +58,17 @@ export const getHotel = async (req, res, next) => {
 //get all hotels
 export const getHotels = async (req, res, next) => {
     console.log(1111111111)
+    console.log(req.query,"req,qurehyhdsfgsadhfhjhl");
     const { min, max, ...others } = req.query
+    console.log({ min, max, ...others } ,"req,qurehyhdsfgsadhfhjhl");
+
     try {
         console.log(2222222222)
-        const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 999 } }).limit(req.query.limit)
-        console.log(3333333333333)
+        // const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 999 } }).limit(req.query.limit)
+        const hotels = await Hotel.find({...others, cheapestPrice: { $gt: min || 1, $lt: max || 5000 } }).limit(req.query.limit)
+        
+        console.log(hotels)
+        console.log('hotelccccccccccccccccs')
         res.status(200).json(hotels)
     } catch (err) {
         console.log(444444444444)
@@ -70,12 +78,12 @@ export const getHotels = async (req, res, next) => {
 
 export const countByCity = async (req, res, next) => {
     const cities = req.query.cities.split(",")
-    console.log(cities)
     try {
+        console.log('jjjjjjjjjjjjjddddddddddddddddddddddddddddddddddddddddddddddddddd');
         const list = await Promise.all(cities.map(city => {
             return Hotel.countDocuments({ city: city })
         }))
-        console.log(list)
+        console.log(list,'jddddddddddddddddddddddddddddddddddddddddddddddddddd')
         res.status(200).json(list)
     } catch (err) {
         next(err)
@@ -83,9 +91,9 @@ export const countByCity = async (req, res, next) => {
 }
 export const countByType = async (req, res, next) => {
     try {
-        const hotelCount = await Hotel.countDocuments({ type: "hotel" })
-        const apartmentCount = await Hotel.countDocuments({ type: "apartment" })
-        const resortCount = await Hotel.countDocuments({ type: "resort" })
+        const hotelCount = await Hotel.countDocuments({ type: "Hotels" })
+        const apartmentCount = await Hotel.countDocuments({ type: "Apartments" })
+        const resortCount = await Hotel.countDocuments({ type: "Resorts" })
         const villaCount = await Hotel.countDocuments({ type: "villa" })
         const cabinCount = await Hotel.countDocuments({ type: "cabin" })
 

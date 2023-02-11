@@ -19,6 +19,7 @@ export const register = async (req, res, next) => {
 
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(req.body.password, salt);
+            console.log(hash,"hashed password")
             const newUser =await new User({
                 ...req.body,
                 password: hash,
@@ -55,7 +56,6 @@ export const login = async (req, res, next) => {
         // const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, `${process.env.JWT}`)
 
         const token = await generateToken({ id: user._id.toString() });
-        console.log(token,"naju")
         const { password, isAdmin, ...otherDetails } = user._doc;
         res.cookie("access_token", token, { httpOnly: true, }).status(200).json({ ...otherDetails, token, status: true, userExist: true, message: 'user logined' })
         // res.status(200).json({...otherDetails}) 
