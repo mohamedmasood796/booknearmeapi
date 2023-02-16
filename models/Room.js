@@ -18,6 +18,9 @@ const RoomSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    photos:{
+        type:[String],
+    },
 
     roomNumbers: [{
         number: Number, 

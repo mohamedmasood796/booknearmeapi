@@ -10,7 +10,7 @@ export const createHotel = async (req, res, next) => {
     try {
         const savedHotel = await newHotel.save()
         console.log(savedHotel,"saved hoterel")
-        res.status(200).json(savedHotel)
+        res.status(200).json({savedHotel , message: 'Hotel added ' })
     } catch (err) {
         next(err)
     }
@@ -34,6 +34,7 @@ export const updateHotel = async (req, res, next) => {
 
 //delete hotel
 export const deleteHotel = async (req, res, next) => {
+    console.log("hotel deleted sucssussfully")
 
     try {
         await Hotel.findByIdAndDelete(req.params.id);
@@ -45,7 +46,8 @@ export const deleteHotel = async (req, res, next) => {
 
 //get 
 export const getHotel = async (req, res, next) => {
-    console.log("hello", req.params.id)
+    
+    console.log("hello just checking ", req.params.id)
     try {
         const hotel = await Hotel.findById(req.params.id)
         console.log(hotel);
@@ -57,21 +59,13 @@ export const getHotel = async (req, res, next) => {
 
 //get all hotels
 export const getHotels = async (req, res, next) => {
-    console.log(1111111111)
-    console.log(req.query,"req,qurehyhdsfgsadhfhjhl");
     const { min, max, ...others } = req.query
-    console.log({ min, max, ...others } ,"req,qurehyhdsfgsadhfhjhl");
 
     try {
-        console.log(2222222222)
-        // const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 999 } }).limit(req.query.limit)
         const hotels = await Hotel.find({...others, cheapestPrice: { $gt: min || 1, $lt: max || 5000 } }).limit(req.query.limit)
         
-        console.log(hotels)
-        console.log('hotelccccccccccccccccs')
         res.status(200).json(hotels)
     } catch (err) {
-        console.log(444444444444)
         next(err)
     }
 }
@@ -79,11 +73,9 @@ export const getHotels = async (req, res, next) => {
 export const countByCity = async (req, res, next) => {
     const cities = req.query.cities.split(",")
     try {
-        console.log('jjjjjjjjjjjjjddddddddddddddddddddddddddddddddddddddddddddddddddd');
         const list = await Promise.all(cities.map(city => {
             return Hotel.countDocuments({ city: city })
         }))
-        console.log(list,'jddddddddddddddddddddddddddddddddddddddddddddddddddd')
         res.status(200).json(list)
     } catch (err) {
         next(err)

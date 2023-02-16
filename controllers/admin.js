@@ -21,8 +21,9 @@ export const adminlogin = async (req, res, next) => {
         const isPasswordCorrect = await bcrypt.compare(req.body.password, admin.password)
         if (!isPasswordCorrect) return res.json({ status: false, message: "wrong password or username" })
         // next(createError(400, "Wrong password or username"))
+        console.log(isPasswordCorrect,"good password")
 
-        const token = await generateToken({ id: user._id.toString() });
+        const token = await generateToken({ id: admin._id.toString() });
 
         // const { password, isAdmin, ...otherDetails } = user._doc;
         res.cookie("access_token", token, { httpOnly: true, }).status(200).json({  token, status: true, message: 'admin logined' })
