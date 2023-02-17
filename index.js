@@ -40,7 +40,7 @@ app.use("/api/users", userRoute)
 app.use("/api/hotels", hotelsRoute)
 app.use("/api/rooms", roomsRoute)
 app.use("/api/admin", adminRoute)
-app.use("/api/booking", bookingRoute)
+app.use("/api/book", bookingRoute)
 
 
 app.use((err, req, res, next) => {

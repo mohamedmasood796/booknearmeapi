@@ -1,13 +1,17 @@
 
-import Booking from "../models/Booking"
+import Booking from "../models/Booking.js"
 
-export const booking=async(req,res)=>{
+export const booking=async(req,res,next)=>{
     // const {place,checkIn,checkOut,numberOfGuests,name,phone}= req.body
-    const newBooking=new Booking(req.body);
-    try {
+    console.log(req.body,"new booking is sucss")
+    
+    const newBooking=new Booking(req.body); 
+    console.log(newBooking,"new booking is sucss booking")
         const savedBooking=await newBooking.save()
-        res.status(200).json({savedBooking,message:"saved Booking"})
-    } catch (err) {
-        next(err)
-    }
+            res.status(200).json({savedBooking,message:"saved Booking"})
+
+    // try {
+    // } catch (err) {
+    //     next(err)
+    // }
 }

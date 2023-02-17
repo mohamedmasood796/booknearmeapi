@@ -3,13 +3,32 @@
 import mongoose from 'mongoose'
 
 const bookingSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
+    // user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true
+    // },
+    // room:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     required:true
+    // },
+    title:{
+        type:String,
+        require:true
     },
-    room:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true
+    price:{
+        type:Number,
+        require:true
+    },
+    maxPeople:{
+        type:Number,
+        require:true
+    },
+    desc:{
+        type:String,
+        require:true
+    },
+    photos:{
+        type:[String],
     },
 
     checkIn: {
@@ -28,7 +47,14 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    price: Number,
+    numberOfGuests:{
+        type:Number,
+        require:true
+    },
+    numberOfNights:{
+        type:Number,
+        require:true
+    }
 });
 
 export default mongoose.model("booking",bookingSchema)
