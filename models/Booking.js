@@ -3,10 +3,10 @@
 import mongoose from 'mongoose'
 
 const bookingSchema = new mongoose.Schema({
-    // user: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true
-    // },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     // room:{
     //     type:mongoose.Schema.Types.ObjectId,
     //     required:true
@@ -53,6 +53,10 @@ const bookingSchema = new mongoose.Schema({
     },
     numberOfNights:{
         type:Number,
+        require:true
+    },
+    status:{
+        type:String,
         require:true
     }
 });
