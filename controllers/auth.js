@@ -25,7 +25,7 @@ export const register = async (req, res, next) => {
                 password: hash,
             }).save()
             console.log(newUser,"new user details");
-            const url=`http://localhost:3000/verify?id=${newUser._id}`
+            const url=`https://booknearme.hamrix.store/verify?id=${newUser._id}`
             console.log(req.body.email);
            await sendEmail(req.body.email, "click to verify your account", url)
 
