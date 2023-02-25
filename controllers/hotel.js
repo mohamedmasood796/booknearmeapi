@@ -1,16 +1,17 @@
 
+import City from "../models/City.js";
 import Hotel from "../models/Hotel.js"
 import Room from "../models/Room.js"
 
 export const createHotel = async (req, res, next) => {
-    console.log(req.body,"hai body")
+    console.log(req.body, "hai body")
     const newHotel = new Hotel(req.body);
-    console.log(newHotel,"newHotels")
+    console.log(newHotel, "newHotels")
 
     try {
         const savedHotel = await newHotel.save()
-        console.log(savedHotel,"saved hoterel")
-        res.status(200).json({savedHotel , message: 'Hotel added ' })
+        console.log(savedHotel, "saved hoterel")
+        res.status(200).json({ savedHotel, message: 'Hotel added ' })
     } catch (err) {
         next(err)
     }
@@ -46,7 +47,7 @@ export const deleteHotel = async (req, res, next) => {
 
 //get 
 export const getHotel = async (req, res, next) => {
-    
+
     console.log("hello just checking ", req.params.id)
     try {
         const hotel = await Hotel.findById(req.params.id)
@@ -62,8 +63,8 @@ export const getHotels = async (req, res, next) => {
     const { min, max, ...others } = req.query
 
     try {
-        const hotels = await Hotel.find({...others, cheapestPrice: { $gt: min || 1, $lt: max || 5000 } }).limit(req.query.limit)
-        
+        const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 15000 } }).limit(req.query.limit)
+
         res.status(200).json(hotels)
     } catch (err) {
         next(err)
@@ -112,18 +113,30 @@ export const getHotelRooms = async (req, res, next) => {
     console.log("rooms adding")
     try {
         console.log("rooms try adding")
-        console.log(req.params.id,"rooms try adding")
-        
-        const hotel =await Hotel.findById(req.params.id)
-        console.log(" try adding",hotel)
+        console.log(req.params.id, "rooms try adding")
+
+        const hotel = await Hotel.findById(req.params.id)
+        console.log(" try adding", hotel)
         const list = await Promise.all(
             hotel.rooms.map((room) => {
                 return Room.findById(room)
             })
         )
-        res.status(200).json(list) 
+        res.status(200).json(list)
     } catch (err) {
         next(err)
     }
 }
 
+export const addCity = async (req, res, next) => {
+    const city = new City(req.body)
+    console.log(city, "it is city")
+    try {
+        const savedCity = await city.save()
+        console.log(savedCity, "saved hoterel")
+        res.status(200).json({ savedCity, message: 'City added ' })
+
+    } catch (err) {
+        next(err)
+    }
+}

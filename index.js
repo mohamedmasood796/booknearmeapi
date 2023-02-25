@@ -12,7 +12,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 const app = express()
 dotenv.config()
-
+mongoose.set('strictQuery', true);
 
 
 
