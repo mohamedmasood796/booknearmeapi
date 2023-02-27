@@ -60,11 +60,27 @@ export const getHotel = async (req, res, next) => {
 
 //get all hotels
 export const getHotels = async (req, res, next) => {
-    console.log(req.query,"it is hamras body")
-    const { min, max, ...others } = req.query
+    // console.log(req.query,"it is hamras body")
+    const { city} = req.query
+    // console.log(min,"it is min")
+    // console.log(max,"it is max")
+    // console.log(others,"it is other")
 
     try {
-        const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 15000 } }).limit(req.query.limit)
+        // const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 15000 } }).limit(req.query.limit)
+        const hotels = await Hotel.find({city:city})
+
+        res.status(200).json(hotels)
+    } catch (err) {
+        next(err)
+    }
+}
+
+//get all hotle in admin side (disply)
+export const getHotelsAdmin = async (req, res, next) => {
+    
+    try {
+        const hotels = await Hotel.find()
 
         res.status(200).json(hotels)
     } catch (err) {
