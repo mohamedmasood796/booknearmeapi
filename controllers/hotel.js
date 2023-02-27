@@ -60,6 +60,7 @@ export const getHotel = async (req, res, next) => {
 
 //get all hotels
 export const getHotels = async (req, res, next) => {
+    console.log(req.query,"it is hamras body")
     const { min, max, ...others } = req.query
 
     try {
@@ -129,13 +130,31 @@ export const getHotelRooms = async (req, res, next) => {
 }
 
 export const addCity = async (req, res, next) => {
-    const city = new City(req.body)
-    console.log(city, "it is city")
+    // const {name} = req.body
+    const newCity = new City(req.body);
+    console.log(newCity, "it is city")
     try {
-        const savedCity = await city.save()
-        console.log(savedCity, "saved hoterel")
-        res.status(200).json({ savedCity, message: 'City added ' })
+        const city = await City.findOne({ name:req.body.name })
+        if (city){
+          return  res.json({ status: false, message: 'city already exist' })
+        }
 
+        const savedCity = await newCity.save()
+        console.log(savedCity, "saved hoterel")
+        res.status(200).json({ savedCity,status: false, message: 'City added ' })
+
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getCity=async(req,res,next)=>{
+    try {
+        console.log("kinsdjnsdjjndsnj");
+        const city=await City.find()
+        console.log(city);
+        res.status(200).json({city,message:"city List"})
+        
     } catch (err) {
         next(err)
     }

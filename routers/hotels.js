@@ -1,7 +1,7 @@
 
 
 import express from "express"
-import { addCity, countByCity, countByType, createHotel, deleteHotel, getHotel, getHotelRooms, getHotels, updateHotel } from "../controllers/hotel.js"
+import { addCity, countByCity, countByType, createHotel, deleteHotel, getCity, getHotel, getHotelRooms, getHotels, updateHotel } from "../controllers/hotel.js"
 import { createRoom } from "../controllers/room.js"
 import Hotel from "../models/Hotel.js"
 import { verifyAdmin } from "../utils/verifyToken.js"
@@ -32,6 +32,7 @@ router.get("/room/:id",getHotelRooms)
 
 //add city 
 router.post("/city",addCity)
+router.post("/getcity",getCity)
 
 
 
