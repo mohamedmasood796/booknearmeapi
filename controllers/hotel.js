@@ -60,15 +60,16 @@ export const getHotel = async (req, res, next) => {
 
 //get all hotels
 export const getHotels = async (req, res, next) => {
+    // const { city} = req.query  //eth prashnam vannal veanam
     // console.log(req.query,"it is hamras body")
-    const { city} = req.query
     // console.log(min,"it is min")
     // console.log(max,"it is max")
     // console.log(others,"it is other")
 
     try {
         // const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 15000 } }).limit(req.query.limit)
-        const hotels = await Hotel.find({city:city})
+        // const hotels = await Hotel.find({city:city})  //eth prashnam vannal veanam
+        const hotels = await Hotel.find().limit(4)
 
         res.status(200).json(hotels)
     } catch (err) {
@@ -113,11 +114,11 @@ export const countByType = async (req, res, next) => {
         // }))
 
         res.status(200).json([
-            { type: 'hotel', count: hotelCount },
-            { type: 'apartments', count: apartmentCount },
-            { type: 'resorts', count: resortCount },
-            { type: 'villas', count: villaCount },
-            { type: 'cabins', count: cabinCount },
+            { type: 'Hotels', count: hotelCount },
+            { type: 'Apartments', count: apartmentCount },
+            { type: 'Resorts', count: resortCount },
+            { type: 'Rillas', count: villaCount },
+            { type: 'Cabins', count: cabinCount },
         ])
     } catch (err) {
         next(err)
@@ -170,6 +171,19 @@ export const getCity=async(req,res,next)=>{
         const city=await City.find()
         console.log(city);
         res.status(200).json({city,message:"city List"})
+        
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getType=async(req,res,next)=>{
+    try {
+        console.log(req.params.searchType,"it is tye,mmmmmmmmmm")
+        console.log("kinsdjnsdjjndsnjmmmmmmmmmmm");
+        const type=await Hotel.find({type:req.params.searchType})
+        console.log(type,"it is type");
+        res.status(200).json({type,message:"city List"})
         
     } catch (err) {
         next(err)
