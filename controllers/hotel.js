@@ -58,9 +58,9 @@ export const getHotel = async (req, res, next) => {
     }
 }
 
-//get all hotels
-export const getHotels = async (req, res, next) => {
-    // const { city} = req.query  //eth prashnam vannal veanam
+//get all hotels buy city for search
+export const getHotelsSearch = async (req, res, next) => {
+    const { city} = req.query  //eth prashnam vannal veanam
     // console.log(req.query,"it is hamras body")
     // console.log(min,"it is min")
     // console.log(max,"it is max")
@@ -68,8 +68,18 @@ export const getHotels = async (req, res, next) => {
 
     try {
         // const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 15000 } }).limit(req.query.limit)
-        // const hotels = await Hotel.find({city:city})  //eth prashnam vannal veanam
-        const hotels = await Hotel.find().limit(4)
+        const hotels = await Hotel.find({city:city}).limit(4)  //eth prashnam vannal veanam
+
+        res.status(200).json(hotels)
+    } catch (err) {
+        next(err)
+    }
+}
+
+//get all hotel
+export const getHotels = async (req, res, next) => {
+    try {
+        const hotels = await Hotel.find().limit(4)  //eth prashnam vannal veanam
 
         res.status(200).json(hotels)
     } catch (err) {
@@ -145,6 +155,30 @@ export const getHotelRooms = async (req, res, next) => {
         next(err)
     }
 }
+
+//add review
+export const reviewdata=async(req,res,next)=>{
+    console.log(req.body,"hai all")
+    try {
+        const {id,userId,number,review}=req.body
+        console.log(id,"it is id")
+        
+        const reviewadded = await Hotel.updateOne({
+            _id:id
+        },
+        {
+            $push:{
+                review:{userId:userId,star:number,comment:review}
+            }
+        }
+        )
+        
+        res.status(200).json({reviewadded,status:true})
+    } catch (err) {
+        next(err)
+    }
+  }
+
 
 export const addCity = async (req, res, next) => {
     // const {name} = req.body

@@ -23,7 +23,17 @@ export const deleteUser = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById({_id:req.body.userId})
+        res.status(200).json(user)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getrivewUser = async (req, res, next) => {
+    try {
+        console.log(req.params.userId,"2333333333333333333333333")
+        const user = await User.findById({_id:req.params.userId})
         res.status(200).json(user)
     } catch (err) {
         next(err)

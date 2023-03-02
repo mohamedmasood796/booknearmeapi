@@ -37,7 +37,7 @@ const HotelSchema=new mongoose.Schema({
             userId:{
                 type:Schema.Types.ObjectId,
             },
-            start:{
+            star:{
                 type:Number,
             },
             comment:{

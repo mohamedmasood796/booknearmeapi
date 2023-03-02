@@ -1,7 +1,8 @@
 
 
 import express from "express"
-import { deleteUser, getUser, getUsers, updateUser } from "../controllers/user.js"
+import { deleteUser, getrivewUser, getUser, getUsers, updateUser } from "../controllers/user.js"
+import authMiddleware from "../utils/authJwtMiddleware.js"
 import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js"
 
 const router =express.Router()
@@ -27,7 +28,8 @@ router.put('/:id' , updateUser)
 router.delete('/:id'  , deleteUser)
 //GET
 
-router.put('/:id' , getUser)
+router.get('/profile' ,authMiddleware, getUser)
+router.get('/reviewprofile/:userId' , getrivewUser)
 
 //GET ALL 
 router.get('/',getUsers)

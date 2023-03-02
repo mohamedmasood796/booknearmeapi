@@ -4,13 +4,11 @@ import jwt from "jsonwebtoken";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const router = express.Router();
-console.log(stripe, "masooo alab")
 
 import Booking from "../models/Booking.js"
 
 export const booking = async (req, res, next) => {
 
-  console.log('req.body:', req.body); // Log the request body
   const { _id, ...product } = req.body;
   const tokenData = {
     _id, ...product
@@ -47,25 +45,36 @@ export const booking = async (req, res, next) => {
 
 export const verify = async (req, res, next) => {
   const { newOrder, userId } = req.body
-  console.log(userId, 2855);
-  console.log(newOrder, "data token is here")
+
   const verify = await jwt.verify(newOrder, process.env.JWT)
-  console.log(verify.newOrder);
   let insideobj = verify.newOrder
   const newarr = { ...insideobj, userId }
   const { _id, ...others } = newarr
-  console.log(others, "this is token form jw")
   const newHotel = new Booking(others);
   const savedOrder = await newHotel.save()
 }
 
 export const bookings=async(req,res,next)=>{
-  console.log("hello just checking ", req.body)
   try {
       const bookingsdata = await Booking.find(req.body)
-      console.log(bookingsdata);
       res.status(200).json(bookingsdata)
   } catch (err) {
       next(err)
   }
 }
+
+export const bookingId=async(req,res,next)=>{
+  try {
+    const {bookingId,userId}=req.body
+    const bookingid=await Booking.findOne({_id:bookingId,userId:userId})
+    if(bookingid){
+      return res.status(200).json({bookingid,status:true,message:"This Booking Id valid"})
+    }else{
+      return res.status(200).json({message:"This Booking Id invalid"})
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
+
