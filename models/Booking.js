@@ -1,6 +1,6 @@
 
 
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const bookingSchema = new mongoose.Schema({
     userId: {
@@ -31,6 +31,21 @@ const bookingSchema = new mongoose.Schema({
         type:[String],
     },
 
+    // bookeddays:[
+    //     {
+    //         roomId:{
+    //             type:Schema.Types.ObjectId
+    //         },
+    //         unavailableDates:[String]
+    //     }
+    // ],
+    roomId:{
+        type:Schema.Types.ObjectId
+    },
+    alldates:{
+        type:[String]
+    },
+   
     checkIn: {
         type: Date,
         required: true

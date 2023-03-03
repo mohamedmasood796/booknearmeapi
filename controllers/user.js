@@ -32,7 +32,6 @@ export const getUser = async (req, res, next) => {
 
 export const getrivewUser = async (req, res, next) => {
     try {
-        console.log(req.params.userId,"2333333333333333333333333")
         const user = await User.findById({_id:req.params.userId})
         res.status(200).json(user)
     } catch (err) {
