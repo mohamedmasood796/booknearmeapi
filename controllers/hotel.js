@@ -48,10 +48,10 @@ export const deleteHotel = async (req, res, next) => {
 //get 
 export const getHotel = async (req, res, next) => {
 
-    console.log("hello just checking ", req.params.id)
+    console.log("hello just checking WW ", req.params.id)
     try {
-        const hotel = await Hotel.findById(req.params.id)
-        console.log(hotel);
+        const hotel = await Hotel.findOne({_id:req.params.id}).populate("rooms.roomId")
+        console.log(hotel,"just tttttttttTTTTTTTTTTTTTTTTTTTTTT");
         res.status(200).json(hotel)
     } catch (err) {
         next(err)
@@ -143,14 +143,15 @@ export const getHotelRooms = async (req, res, next) => {
         console.log("rooms try adding")
         console.log(req.params.id, "rooms try adding me")
 
-        const hotel = await Hotel.findById(req.params.id)
-        console.log(" try adding", hotel)
-        const list = await Promise.all(
-            hotel.rooms.map((room) => {
-                return Room.findById(room)
-            })
-        )
-        res.status(200).json(list)
+        const hotel = await Hotel.findOne({_id:req.params.id}).populate("rooms.roomId")
+        console.log(" YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYtry adding", hotel)
+
+        // const list = await Promise.all(
+        //     hotel.rooms.map((room) => {
+        //         return Room.findById(room)
+        //     })
+        // )
+        res.status(200).json(hotel)
     } catch (err) {
         next(err)
     }

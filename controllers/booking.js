@@ -10,15 +10,17 @@ import Booking from "../models/Booking.js"
 export const booking = async (req, res, next) => {
 
   const { ...product } = req.body;
-
+console.log(req.body,'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
   const { _id, ...datas } = product.newOrder
+  console.log(_id,'iddddd');
+  console.log(datas,'datasaaa');
   const roomId = _id
   const tokenData = {
     roomId, ...datas
   }
 
   console.log(datas, "222222222222222222222222222222222222222222222222222222222222222222222222")
-  console.log(roomId, "3333333333333333333333333333333333333333333")
+  // console.log(roomId, "3333333333333333333333333333333333333333333")
   console.log(tokenData, "444444444444444444444444444444444444444444444")
 
   // create jwt token
