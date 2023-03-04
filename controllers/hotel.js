@@ -78,9 +78,10 @@ export const getHotelsSearch = async (req, res, next) => {
 
 //get all hotel
 export const getHotels = async (req, res, next) => {
+console.log("??????????????????????????????")
     try {
         const hotels = await Hotel.find().limit(4)  //eth prashnam vannal veanam
-
+        console.log(hotels,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         res.status(200).json(hotels)
     } catch (err) {
         next(err)
@@ -100,11 +101,14 @@ export const getHotelsAdmin = async (req, res, next) => {
 }
 
 export const countByCity = async (req, res, next) => {
-    const cities = req.query.cities.split(",")
+    // const cities = req.query.cities.split(",")
     try {
-        const list = await Promise.all(cities.map(city => {
-            return Hotel.countDocuments({ city: city })
-        }))
+        // const list = await Promise.all(cities.map(city => {
+        //     return Hotel.countDocuments({ city: city })
+        // }))
+         
+        const list =await City.find()
+        
         res.status(200).json(list)
     } catch (err) {
         next(err)
@@ -202,7 +206,6 @@ export const addCity = async (req, res, next) => {
 
 export const getCity=async(req,res,next)=>{
     try {
-        console.log("kinsdjnsdjjndsnj");
         const city=await City.find()
         console.log(city);
         res.status(200).json({city,message:"city List"})
@@ -214,10 +217,7 @@ export const getCity=async(req,res,next)=>{
 
 export const getType=async(req,res,next)=>{
     try {
-        console.log(req.params.searchType,"it is tye,mmmmmmmmmm")
-        console.log("kinsdjnsdjjndsnjmmmmmmmmmmm");
         const type=await Hotel.find({type:req.params.searchType})
-        console.log(type,"it is type");
         res.status(200).json({type,message:"city List"})
         
     } catch (err) {
