@@ -10,13 +10,18 @@ import Booking from "../models/Booking.js"
 export const booking = async (req, res, next) => {
 
   const { ...product } = req.body;
-console.log(req.body,'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-  const { _id, ...datas } = product.newOrder
-  console.log(_id,'iddddd');
-  console.log(datas,'datasaaa');
+  console.log(req.body, 'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+  console.log(product, 'BBbodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+  const alldates=product.newOrder.alldates
+  const numberOfNights=product.newOrder.numberOfNights
+  const checkIn=product.newOrder.checkIn
+  const checkOut=product.newOrder.checkOut
+  const { _id, ...datas } = product.newOrder.oneroom
+  console.log(_id, 'iddddd');
+  console.log(datas, 'datasaaa');
   const roomId = _id
   const tokenData = {
-    roomId, ...datas
+    roomId, ...datas,alldates,numberOfNights,checkIn,checkOut
   }
 
   console.log(datas, "222222222222222222222222222222222222222222222222222222222222222222222222")
@@ -27,9 +32,9 @@ console.log(req.body,'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
   const token = jwt.sign(tokenData, process.env.JWT)
   console.log(token, "55555555555555555555555555555555555555")
 
-  const unitAmount = parseInt(product.newOrder.price * 100);
+  const unitAmount = parseInt(tokenData.price * 100);
   console.log('unitAmount:', unitAmount); // Log the unit amount
-  console.log('Amount:', product); // Log the unit amount
+  console.log('Amount:', tokenData); // Log the unit amount
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -37,7 +42,7 @@ console.log(req.body,'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
         price_data: {
           currency: "inr",
           product_data: {
-            name: product.newOrder.name,
+            name: product.newOrder.oneroom.title,
           },
           unit_amount: unitAmount,
         },
@@ -104,10 +109,51 @@ export const bookingdates = async (req, res, next) => {
       }
     }
     console.log(date, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-    return res.status(200).json({ bookingdata, message: "This dates not available", status: true,date })
+    return res.status(200).json({ bookingdata, message: "This dates not available", status: true, date })
 
   } catch (err) {
     next(err)
   }
 }
 
+export const checkavailability = async (req, res, next) => {
+
+
+  console.log("mubooooooooooooooooooooooo")
+  const alldates = req.body.alldates
+  try {
+    console.log(req.body, "it is checkavailability")
+    const findUser = await Booking.find({ roomId: req.body.roomId })
+    console.log(findUser, "kooi")
+    const date = []
+    if (findUser) {
+      // const bookingdata = await Booking.find()
+      // console.log(bookingdata, "?????????????????????????????????????????????????????")
+
+      for (let i = 0; i < findUser.length; i++) {
+        for (let j = 0; j < findUser[i].alldates.length; j++) {
+          date.push(findUser[i].alldates[j])
+        }
+      }
+      console.log(date, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+    }
+    const foundDates = []
+    for (const date1 of alldates) {
+      for (const date2 of date) {
+        if (date1 == date2) {
+          foundDates.push(date1);
+          console.log(foundDates, "AAAAAAAAAAALLLLLLLLLLLLLLLL DDDDDDDDDAATTTTEEEEEEEE")
+          break; // break out of inner loop if a match is found
+        }
+
+      }
+    }
+    if(foundDates.length>0){
+      return res.status(200).json({ message: "This dates not available",   status: false })
+    }else{
+      return res.status(200).json({ message:"Date is available" ,  status: true  })
+    }
+  } catch (err) {
+    next(err)
+  }
+}

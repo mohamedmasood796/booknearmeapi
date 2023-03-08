@@ -19,10 +19,10 @@ const bookingSchema = new mongoose.Schema({
         type:Number,
         require:true
     },
-    maxPeople:{
-        type:Number,
-        require:true
-    },
+    // maxPeople:{
+    //     type:Number,
+    //     require:true
+    // },
     desc:{
         type:String,
         require:true
@@ -54,18 +54,18 @@ const bookingSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    name: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
-    },
-    numberOfGuests:{
-        type:Number,
-        require:true
-    },
+    // name: {
+    //     type: String,
+    //     required: true
+    // },
+    // phone: {
+    //     type: String,
+    //     required: true
+    // },
+    // numberOfGuests:{
+    //     type:Number,
+    //     require:true
+    // },
     numberOfNights:{
         type:Number,
         require:true
