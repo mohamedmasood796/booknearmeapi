@@ -244,3 +244,16 @@ export const bookingDetails = async (req, res, next) => {
     next(err)
   }
 }
+
+export const cancleBooking=async(req,res,next)=>{
+  console.log(req.params.id,"it is idsssssssssssssssssssssssss")
+  try {
+    const data = await Booking.findOne({_id:req.params.id})
+      if(data.statusChange==="Booked"){
+        data.statusChange="Canceled"
+      }
+      data.save()
+  } catch (err) {
+    next(err)
+  }
+}
