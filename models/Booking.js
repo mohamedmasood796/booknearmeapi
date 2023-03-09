@@ -11,24 +11,24 @@ const bookingSchema = new mongoose.Schema({
     //     type:mongoose.Schema.Types.ObjectId,
     //     required:true
     // },
-    title:{
-        type:String,
-        require:true
+    title: {
+        type: String,
+        require: true
     },
-    price:{
-        type:Number,
-        require:true
+    price: {
+        type: Number,
+        require: true
     },
     // maxPeople:{
     //     type:Number,
     //     require:true
     // },
-    desc:{
-        type:String,
-        require:true
+    desc: {
+        type: String,
+        require: true
     },
-    photos:{
-        type:[String],
+    photos: {
+        type: [String],
     },
 
     // bookeddays:[
@@ -39,13 +39,13 @@ const bookingSchema = new mongoose.Schema({
     //         unavailableDates:[String]
     //     }
     // ],
-    roomId:{
-        type:Schema.Types.ObjectId
+    roomId: {
+        type: Schema.Types.ObjectId
     },
-    alldates:{
-        type:[String]
+    alldates: {
+        type: [String]
     },
-   
+
     checkIn: {
         type: Date,
         required: true
@@ -66,17 +66,17 @@ const bookingSchema = new mongoose.Schema({
     //     type:Number,
     //     require:true
     // },
-    numberOfNights:{
-        type:Number,
-        require:true
+    numberOfNights: {
+        type: Number,
+        require: true
     },
-    status:{
-        type:String,
-        require:true
+    statusChange: {
+        type: String,
+        require: true
     }
-});
+}, {timestamps:true});
 
-export default mongoose.model("booking",bookingSchema)
+export default mongoose.model("booking", bookingSchema)
 
 // const BookingModel = mongoose.model('Booking', bookingSchema);
 

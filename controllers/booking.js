@@ -12,16 +12,17 @@ export const booking = async (req, res, next) => {
   const { ...product } = req.body;
   console.log(req.body, 'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
   console.log(product, 'BBbodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-  const alldates=product.newOrder.alldates
-  const numberOfNights=product.newOrder.numberOfNights
-  const checkIn=product.newOrder.checkIn
-  const checkOut=product.newOrder.checkOut
+  const alldates = product.newOrder.alldates
+  const numberOfNights = product.newOrder.numberOfNights
+  const checkIn = product.newOrder.checkIn
+  const checkOut = product.newOrder.checkOut
   const { _id, ...datas } = product.newOrder.oneroom
   console.log(_id, 'iddddd');
   console.log(datas, 'datasaaa');
   const roomId = _id
+  const statusChange="Booked"
   const tokenData = {
-    roomId, ...datas,alldates,numberOfNights,checkIn,checkOut
+    roomId, ...datas, alldates, numberOfNights, checkIn, checkOut,statusChange
   }
 
   console.log(datas, "222222222222222222222222222222222222222222222222222222222222222222222222")
@@ -148,12 +149,20 @@ export const checkavailability = async (req, res, next) => {
 
       }
     }
-    if(foundDates.length>0){
-      return res.status(200).json({ message: "This dates not available",   status: false })
-    }else{
-      return res.status(200).json({ message:"Date is available" ,  status: true  })
+    if (foundDates.length > 0) {
+      return res.status(200).json({ message: "This dates not available", status: false })
+    } else {
+      return res.status(200).json({ message: "Date is available", status: true })
     }
   } catch (err) {
     next(err)
   }
 }
+
+
+
+
+
+
+
+
