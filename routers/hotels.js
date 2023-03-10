@@ -1,7 +1,7 @@
 
 
 import express from "express"
-import { addCity, countByCity, countByType, createHotel, deleteHotel, getCity, getHotel, getHotelRooms, getHotels, getHotelsAdmin, getHotelsSearch, getType, reviewdata, updateHotel } from "../controllers/hotel.js"
+import { addCity, checkHotel, countByCity, countByType, createHotel, deleteHotel, getCity, getHotel, getHotelRooms, getHotels, getHotelsAdmin, getHotelsSearch, getType, reviewdata, updateHotel } from "../controllers/hotel.js"
 import { createRoom } from "../controllers/room.js"
 import Hotel from "../models/Hotel.js"
 import authMiddleware from "../utils/authJwtMiddleware.js"
@@ -37,6 +37,7 @@ router.get("/countByType",countByType)
 router.get("/room/:id",getHotelRooms)
 
 router.post("/review",authMiddleware,reviewdata)
+router.post("/checkHotel",authMiddleware,checkHotel)
 
 //add city 
 router.post("/city",addCity)

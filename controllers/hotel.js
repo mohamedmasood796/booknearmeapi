@@ -1,4 +1,5 @@
 
+import Booking from "../models/Booking.js";
 import City from "../models/City.js";
 import Hotel from "../models/Hotel.js"
 import Room from "../models/Room.js"
@@ -19,7 +20,7 @@ export const updateHotel = async (req, res, next) => {
 
     try {
         const updatedHotel = await Hotel.findByIdAndUpdate(
-           req.body._id,
+            req.body._id,
             { $set: req.body },
             { new: true }
         );
@@ -44,7 +45,7 @@ export const deleteHotel = async (req, res, next) => {
 export const getHotel = async (req, res, next) => {
 
     try {
-        const hotel = await Hotel.findOne({_id:req.params.id}).populate("rooms.roomId")
+        const hotel = await Hotel.findOne({ _id: req.params.id }).populate("rooms.roomId")
         res.status(200).json(hotel)
     } catch (err) {
         next(err)
@@ -53,7 +54,7 @@ export const getHotel = async (req, res, next) => {
 
 //get all hotels buy city for search
 export const getHotelsSearch = async (req, res, next) => {
-    const { city} = req.query  //eth prashnam vannal veanam
+    const { city } = req.query  //eth prashnam vannal veanam
     // console.log(req.query,"it is hamras body")
     // console.log(min,"it is min")
     // console.log(max,"it is max")
@@ -61,7 +62,7 @@ export const getHotelsSearch = async (req, res, next) => {
 
     try {
         // const hotels = await Hotel.find({ ...others, cheapestPrice: { $gt: min || 1, $lt: max || 15000 } }).limit(req.query.limit)
-        const hotels = await Hotel.find({city:city}).limit(4)  //eth prashnam vannal veanam
+        const hotels = await Hotel.find({ city: city }).limit(4)  //eth prashnam vannal veanam
 
         res.status(200).json(hotels)
     } catch (err) {
@@ -81,7 +82,7 @@ export const getHotels = async (req, res, next) => {
 
 //get all hotle in admin side (disply)
 export const getHotelsAdmin = async (req, res, next) => {
-    
+
     try {
         const hotels = await Hotel.find()
 
@@ -97,9 +98,9 @@ export const countByCity = async (req, res, next) => {
         // const list = await Promise.all(cities.map(city => {
         //     return Hotel.countDocuments({ city: city })
         // }))
-         
-        const list =await City.find()
-        
+
+        const list = await City.find()
+
         res.status(200).json(list)
     } catch (err) {
         next(err)
@@ -135,7 +136,7 @@ export const countByType = async (req, res, next) => {
 export const getHotelRooms = async (req, res, next) => {
     try {
 
-        const hotel = await Hotel.findOne({_id:req.params.id}).populate("rooms.roomId")
+        const hotel = await Hotel.findOne({ _id: req.params.id }).populate("rooms.roomId")
 
         // const list = await Promise.all(
         //     hotel.rooms.map((room) => {
@@ -148,60 +149,92 @@ export const getHotelRooms = async (req, res, next) => {
     }
 }
 
-//add review
-export const reviewdata=async(req,res,next)=>{
+//check user booked this hotel or not
+export const checkHotel = async (req, res, next) => {
+    console.log(req.body,"MMMMMMMMMMMMMmm")
     try {
-        const {id,userId,number,review}=req.body
-        
-        const reviewadded = await Hotel.updateOne({
-            _id:id
-        },
-        {
-            $push:{
-                review:{userId:userId,star:number,comment:review}
-            }
+        const {userId, hotelId } = req.body
+        const findHotel = await Booking.findOne({userId:userId, hotelId: hotelId })
+        console.log(findHotel,"find hotel")
+        if(findHotel){
+            res.status(200).json({status:true})
+        }else{
+            res.status(200).json({status:false,message:"review can add only after order!"})
         }
-        )
-        
-        res.status(200).json({reviewadded,status:true})
     } catch (err) {
         next(err)
     }
-  }
+
+}
+
+//add review
+export const reviewdata = async (req, res, next) => {
+    try {
+        // const {id,userId,number,review}=req.body
+        // const reviewadded = await Hotel.updateOne({
+        //     _id:id
+        // },
+        // {
+        //     $push:{
+        //         review:{userId:userId,star:number,comment:review}
+        //     }
+        // })
+
+        const { hotelId, userId, review } = req.body
+        console.log(req.body, "it sis body")
+        const findHotelId = await Booking.findOne({ hotelId: hotelId })
+        console.log(findHotelId, "dind hotel id")
+        if (findHotelId) {
+            const findHotel = await Hotel.findByIdAndUpdate(hotelId,
+                {
+                    $push: {
+                        review: { userId: userId, comment: review }
+                    }
+                }
+            )
+        }
+        if (findHotelId) {
+
+        }
+        res.status(200).json({ status: true })
+    } catch (err) {
+        next(err)
+    }
+}
 
 
 export const addCity = async (req, res, next) => {
     // const {name} = req.body
     const newCity = new City(req.body);
     try {
-        const city = await City.findOne({ name:req.body.name })
-        if (city){
-          return  res.json({ status: false, message: 'city already exist' })
+        const city = await City.findOne({ name: req.body.name })
+        if (city) {
+            return res.json({ status: false, message: 'city already exist' })
         }
 
         const savedCity = await newCity.save()
-        res.status(200).json({ savedCity,status: false, message: 'City added ' })
+        res.status(200).json({ savedCity, status: false, message: 'City added ' })
 
     } catch (err) {
         next(err)
     }
 }
 
-export const getCity=async(req,res,next)=>{
+export const getCity = async (req, res, next) => {
     try {
-        const city=await City.find()
-        res.status(200).json({city,message:"city List"})
-        
+        const city = await City.find()
+        res.status(200).json({ city, message: "city List" })
+
     } catch (err) {
         next(err)
     }
 }
 
-export const getType=async(req,res,next)=>{
+export const getType = async (req, res, next) => {
     try {
-        const type=await Hotel.find({type:req.params.searchType})
-        res.status(200).json({type,message:"city List"})
-        
+        const type = await Hotel.find({ type: req.params.searchType })
+        res.status(200).json({ type, message: "city List" })
+
     } catch (err) {
         next(err)
     }
