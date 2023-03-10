@@ -19,14 +19,11 @@ export const register = async (req, res, next) => {
 
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(req.body.password, salt);
-            console.log(hash,"hashed password")
             const newUser =await new User({
                 ...req.body,
                 password: hash,
             }).save()
-            console.log(newUser,"new user details");
             const url=`${process.env.REACT_APP_FRONT_END}/verify?id=${newUser._id}`
-            console.log(req.body.email);
            await sendEmail(req.body.email, "click to verify your account", url)
 
             // const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, `${process.env.JWT}`)
@@ -42,9 +39,7 @@ export const register = async (req, res, next) => {
 
 //login
 export const login = async (req, res, next) => {
-    console.log('hai')
     try {
-        console.log("hai mukthar")
         const user = await User.findOne({ username: req.body.username })
         if (!user) return res.json({ status: false, message: "user not found" })
         // next(createError(404, "User not found !"))
@@ -60,7 +55,6 @@ export const login = async (req, res, next) => {
         res.cookie("access_token", token, { httpOnly: true, }).status(200).json({ ...otherDetails, token, status: true, userExist: true, message: 'user logined' })
         // res.status(200).json({...otherDetails}) 
     } catch (err) {
-        console.log("haikoo")
         next(err)
     }
 }
@@ -69,7 +63,6 @@ export const login = async (req, res, next) => {
 export const verifyUser= async (req, res, next) => {
 
   const user=await User.findOne({_id:req.params.id})
-  console.log(user,"ahahahah")
 
   if(!user) return res.json({ status: false, message: "please register" }) 
   if(user){

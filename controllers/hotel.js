@@ -4,13 +4,10 @@ import Hotel from "../models/Hotel.js"
 import Room from "../models/Room.js"
 
 export const createHotel = async (req, res, next) => {
-    console.log(req.body, "hai body")
     const newHotel = new Hotel(req.body);
-    console.log(newHotel, "newHotels")
 
     try {
         const savedHotel = await newHotel.save()
-        console.log(savedHotel, "saved hoterel")
         res.status(200).json({ savedHotel, message: 'Hotel added ' })
     } catch (err) {
         next(err)
@@ -20,10 +17,9 @@ export const createHotel = async (req, res, next) => {
 
 export const updateHotel = async (req, res, next) => {
 
-
     try {
         const updatedHotel = await Hotel.findByIdAndUpdate(
-            req.params.id,
+           req.body._id,
             { $set: req.body },
             { new: true }
         );
@@ -35,7 +31,6 @@ export const updateHotel = async (req, res, next) => {
 
 //delete hotel
 export const deleteHotel = async (req, res, next) => {
-    console.log("hotel deleted sucssussfully")
 
     try {
         await Hotel.findByIdAndDelete(req.params.id);
@@ -48,10 +43,8 @@ export const deleteHotel = async (req, res, next) => {
 //get 
 export const getHotel = async (req, res, next) => {
 
-    console.log("hello just checking WW ", req.params.id)
     try {
         const hotel = await Hotel.findOne({_id:req.params.id}).populate("rooms.roomId")
-        console.log(hotel,"just tttttttttTTTTTTTTTTTTTTTTTTTTTT");
         res.status(200).json(hotel)
     } catch (err) {
         next(err)
@@ -78,10 +71,8 @@ export const getHotelsSearch = async (req, res, next) => {
 
 //get all hotel
 export const getHotels = async (req, res, next) => {
-console.log("??????????????????????????????")
     try {
         const hotels = await Hotel.find().limit(4)  //eth prashnam vannal veanam
-        console.log(hotels,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         res.status(200).json(hotels)
     } catch (err) {
         next(err)
@@ -142,13 +133,9 @@ export const countByType = async (req, res, next) => {
 //room
 
 export const getHotelRooms = async (req, res, next) => {
-    console.log("rooms adding")
     try {
-        console.log("rooms try adding")
-        console.log(req.params.id, "rooms try adding me")
 
         const hotel = await Hotel.findOne({_id:req.params.id}).populate("rooms.roomId")
-        console.log(" YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYtry adding", hotel)
 
         // const list = await Promise.all(
         //     hotel.rooms.map((room) => {
@@ -163,10 +150,8 @@ export const getHotelRooms = async (req, res, next) => {
 
 //add review
 export const reviewdata=async(req,res,next)=>{
-    console.log(req.body,"hai all")
     try {
         const {id,userId,number,review}=req.body
-        console.log(id,"it is id")
         
         const reviewadded = await Hotel.updateOne({
             _id:id
@@ -188,7 +173,6 @@ export const reviewdata=async(req,res,next)=>{
 export const addCity = async (req, res, next) => {
     // const {name} = req.body
     const newCity = new City(req.body);
-    console.log(newCity, "it is city")
     try {
         const city = await City.findOne({ name:req.body.name })
         if (city){
@@ -196,7 +180,6 @@ export const addCity = async (req, res, next) => {
         }
 
         const savedCity = await newCity.save()
-        console.log(savedCity, "saved hoterel")
         res.status(200).json({ savedCity,status: false, message: 'City added ' })
 
     } catch (err) {
@@ -207,7 +190,6 @@ export const addCity = async (req, res, next) => {
 export const getCity=async(req,res,next)=>{
     try {
         const city=await City.find()
-        console.log(city);
         res.status(200).json({city,message:"city List"})
         
     } catch (err) {

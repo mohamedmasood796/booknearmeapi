@@ -15,7 +15,7 @@ router.post("/",createHotel)
 
 //update
 
-router.put("/:id",updateHotel)
+router.post("/updateHotel",updateHotel)
 
 //delect
 

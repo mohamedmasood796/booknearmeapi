@@ -6,12 +6,9 @@ import { createError } from "../utils/error.js"
 export const createRoom= async (req,res,next)=>{
      
     const hotelId= req.params.hotelid;
-    console.log(hotelId,"hotelIQQQQQQQQQQQQQQQQQQQQQ")
     const newRoom= new Room(req.body)
-    console.log(newRoom,"newroom")
     try{
         const savedRoom=await newRoom.save()
-        console.log(savedRoom._id,"qqqqqqqqqqqqq")
         try{
             // await Hotel.findByIdAndUpdate(hotelId,{
             //     $push:{rooms:savedRoom._id},
@@ -22,7 +19,6 @@ export const createRoom= async (req,res,next)=>{
                     rooms:{roomId:savedRoom._id}
                 }}
             )
-            console.log(res)
         }catch(err){
             next(err)
         }
@@ -50,7 +46,6 @@ export const updateRoom = async (req, res, next) => {
 
 
 export const updateRoomAvailability = async (req, res, next) => {
-    console.log("update rooms",req.params)
 
     try {
         const result = await Room.updateOne(
@@ -74,9 +69,7 @@ export const updateRoomAvailability = async (req, res, next) => {
 //delete hotel
 export const deleteRoom = async (req, res, next) => {
     const hotelId= req.params.hotelid;
-    console.log(hotelId,"hotelid is here")
     try {
-        console.log(req.params.id,"params id is here")
         await Room.findByIdAndDelete(req.params.id);
         try{
             await Hotel.findByIdAndUpdate(hotelId,{
@@ -93,10 +86,8 @@ export const deleteRoom = async (req, res, next) => {
 
 //get 
 export const getRoom = async (req, res, next) => {
-console.log(req.params.id,"were is hotels")
     try {
         const room = await Room.findById(req.params.id)
-        console.log(room,"room data di")
         res.status(200).json(room)
     } catch (err) {
         next(err)

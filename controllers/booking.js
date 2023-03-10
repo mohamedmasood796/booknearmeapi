@@ -10,32 +10,22 @@ import Booking from "../models/Booking.js"
 export const booking = async (req, res, next) => {
 
   const { ...product } = req.body;
-  console.log(req.body, 'bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-  console.log(product, 'BBbodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
   const alldates = product.newOrder.alldates
   const numberOfNights = product.newOrder.numberOfNights
   const checkIn = product.newOrder.checkIn
   const checkOut = product.newOrder.checkOut
   const { _id, ...datas } = product.newOrder.oneroom
-  console.log(_id, 'iddddd');
-  console.log(datas, 'datasaaa');
   const roomId = _id
   const statusChange="Booked"
   const tokenData = {
     roomId, ...datas, alldates, numberOfNights, checkIn, checkOut,statusChange
   }
 
-  console.log(datas, "222222222222222222222222222222222222222222222222222222222222222222222222")
-  // console.log(roomId, "3333333333333333333333333333333333333333333")
-  console.log(tokenData, "444444444444444444444444444444444444444444444")
 
   // create jwt token
   const token = jwt.sign(tokenData, process.env.JWT)
-  console.log(token, "55555555555555555555555555555555555555")
 
   const unitAmount = parseInt(tokenData.price * 100);
-  console.log('unitAmount:', unitAmount); // Log the unit amount
-  console.log('Amount:', tokenData); // Log the unit amount
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -61,19 +51,14 @@ export const booking = async (req, res, next) => {
 
 export const verify = async (req, res, next) => {
   const { newOrder, userId } = req.body
-  console.log(newOrder, "66666666666666666666666666666666")
-  console.log(userId, "777777777777777777777777777777777")
 
   const verify = await jwt.verify(newOrder, process.env.JWT)
-  console.log(verify, "88888888888888888888888888888888888888888888")
   // let insideobj = verify.newOrder
   // const newarr = { ...insideobj, userId }
   // const { _id, ...others } = newarr
   const others = { userId, ...verify }
-  console.log(others, "99999999999999999999999999999999999999999")
   const newHotel = new Booking(others);
   const savedOrder = await newHotel.save()
-  console.log(savedOrder)
 }
 
 export const bookings = async (req, res, next) => {
@@ -101,7 +86,6 @@ export const bookingId = async (req, res, next) => {
 
 export const bookingdates = async (req, res, next) => {
   try {
-    console.log("on back endZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
     const date = []
     const bookingdata = await Booking.find()
     for (let i = 0; i < bookingdata.length; i++) {
@@ -109,7 +93,6 @@ export const bookingdates = async (req, res, next) => {
         date.push(bookingdata[i].alldates[j])
       }
     }
-    console.log(date, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     return res.status(200).json({ bookingdata, message: "This dates not available", status: true, date })
 
   } catch (err) {
@@ -120,30 +103,24 @@ export const bookingdates = async (req, res, next) => {
 export const checkavailability = async (req, res, next) => {
 
 
-  console.log("mubooooooooooooooooooooooo")
   const alldates = req.body.alldates
   try {
-    console.log(req.body, "it is checkavailability")
     const findUser = await Booking.find({ roomId: req.body.roomId })
-    console.log(findUser, "kooi")
     const date = []
     if (findUser) {
       // const bookingdata = await Booking.find()
-      // console.log(bookingdata, "?????????????????????????????????????????????????????")
 
       for (let i = 0; i < findUser.length; i++) {
         for (let j = 0; j < findUser[i].alldates.length; j++) {
           date.push(findUser[i].alldates[j])
         }
       }
-      console.log(date, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     }
     const foundDates = []
     for (const date1 of alldates) {
       for (const date2 of date) {
         if (date1 == date2) {
           foundDates.push(date1);
-          console.log(foundDates, "AAAAAAAAAAALLLLLLLLLLLLLLLL DDDDDDDDDAATTTTEEEEEEEE")
           break; // break out of inner loop if a match is found
         }
 

@@ -5,7 +5,8 @@ import mongoose, { Schema } from 'mongoose'
 const bookingSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref:'User'
     },
     // room:{
     //     type:mongoose.Schema.Types.ObjectId,
