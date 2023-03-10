@@ -44,7 +44,6 @@ app.use("/api/book", bookingRoute)
 
 
 app.use((err, req, res, next) => {
-  console.log(err)
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Somethig went wrong!"
   return res.status(errorStatus).json({

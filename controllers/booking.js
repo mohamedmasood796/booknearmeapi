@@ -14,11 +14,12 @@ export const booking = async (req, res, next) => {
   const numberOfNights = product.newOrder.numberOfNights
   const checkIn = product.newOrder.checkIn
   const checkOut = product.newOrder.checkOut
+  const hotelId=product.newOrder.hotelId
   const { _id, ...datas } = product.newOrder.oneroom
   const roomId = _id
   const statusChange="Booked"
   const tokenData = {
-    roomId, ...datas, alldates, numberOfNights, checkIn, checkOut,statusChange
+    roomId, ...datas, alldates, numberOfNights, checkIn, checkOut,statusChange,hotelId
   }
 
 

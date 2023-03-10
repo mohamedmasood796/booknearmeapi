@@ -40,6 +40,9 @@ const bookingSchema = new mongoose.Schema({
     //         unavailableDates:[String]
     //     }
     // ],
+    hotelId: {
+        type: Schema.Types.ObjectId
+    },
     roomId: {
         type: Schema.Types.ObjectId
     },
