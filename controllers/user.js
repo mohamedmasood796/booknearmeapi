@@ -31,9 +31,11 @@ export const getUser = async (req, res, next) => {
 }
 
 export const getrivewUser = async (req, res, next) => {
+    console.log(9999999999999999999999)
     try {
         const user = await User.findById({_id:req.params.userId})
-        res.status(200).json(user)
+        console.log(user,"HHHHHHHHHHHHHHHHHHHHHHHHHHH")
+        res.status(200).json(user.username)
     } catch (err) {
         next(err)
     }

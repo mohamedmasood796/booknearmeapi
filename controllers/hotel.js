@@ -45,7 +45,8 @@ export const deleteHotel = async (req, res, next) => {
 export const getHotel = async (req, res, next) => {
 
     try {
-        const hotel = await Hotel.findOne({ _id: req.params.id }).populate("rooms.roomId")
+        const hotel = await Hotel.findOne({ _id: req.params.id }).populate("rooms.roomId").populate('review.userId',"username")
+
         res.status(200).json(hotel)
     } catch (err) {
         next(err)
@@ -136,7 +137,7 @@ export const countByType = async (req, res, next) => {
 export const getHotelRooms = async (req, res, next) => {
     try {
 
-        const hotel = await Hotel.findOne({ _id: req.params.id }).populate("rooms.roomId")
+        const hotel = await Hotel.findOne({ _id: req.params.id }).populate("rooms.roomId").populate('review.userId',"username")
 
         // const list = await Promise.all(
         //     hotel.rooms.map((room) => {
@@ -151,13 +152,22 @@ export const getHotelRooms = async (req, res, next) => {
 
 //check user booked this hotel or not
 export const checkHotel = async (req, res, next) => {
-    console.log(req.body,"MMMMMMMMMMMMMmm")
     try {
+        console.log(req.body,"it is req.body")
+
         const {userId, hotelId } = req.body
-        const findHotel = await Booking.findOne({userId:userId, hotelId: hotelId })
-        console.log(findHotel,"find hotel")
-        if(findHotel){
-            res.status(200).json({status:true})
+        const date = new Date();
+        console.log(date);
+        const findHotel = await Booking.findOne({userId:userId, hotelId:hotelId })
+        console.log(findHotel,"findHotel")
+        if(findHotel ){
+            if(date>findHotel.checkOut){
+
+                res.status(200).json({status:true})
+            }else{
+                res.status(200).json({status:false,message:"review can add only after checkOut!"})
+
+            }
         }else{
             res.status(200).json({status:false,message:"review can add only after order!"})
         }
@@ -170,20 +180,9 @@ export const checkHotel = async (req, res, next) => {
 //add review
 export const reviewdata = async (req, res, next) => {
     try {
-        // const {id,userId,number,review}=req.body
-        // const reviewadded = await Hotel.updateOne({
-        //     _id:id
-        // },
-        // {
-        //     $push:{
-        //         review:{userId:userId,star:number,comment:review}
-        //     }
-        // })
-
+     
         const { hotelId, userId, review } = req.body
-        console.log(req.body, "it sis body")
         const findHotelId = await Booking.findOne({ hotelId: hotelId })
-        console.log(findHotelId, "dind hotel id")
         if (findHotelId) {
             const findHotel = await Hotel.findByIdAndUpdate(hotelId,
                 {

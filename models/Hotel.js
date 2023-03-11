@@ -35,7 +35,8 @@ const HotelSchema = new mongoose.Schema({
     review: [
         {
             userId: {
-                type: Schema.Types.ObjectId,
+                type: mongoose.Schema.Types.ObjectId,
+                 ref:'User'
             },
             star: {
                 type: Number,
