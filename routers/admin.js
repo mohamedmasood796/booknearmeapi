@@ -2,7 +2,7 @@
 
 
 import express from "express";
-import { adminlogin, bookingChart, bookingDetails, cancleBooking, changeStatus, paymentChart } from "../controllers/admin.js";
+import { adminlogin, bookingChart, bookingDetails, bookingdetailsadmin, cancleBooking, changeStatus, getFullData, paymentChart } from "../controllers/admin.js";
 const router=express.Router()
 
 
@@ -12,6 +12,8 @@ router.get("/paymentChart",paymentChart)
 router.get("/bookingChart",bookingChart)
 router.get("/bookingDetails",bookingDetails)
 router.get("/cancleBooking/:id",cancleBooking)
+router.get("/bookingdetailsadmin/:id",bookingdetailsadmin)
+router.get("/getFullData",getFullData)
 
 
 

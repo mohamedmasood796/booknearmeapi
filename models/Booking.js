@@ -44,7 +44,8 @@ const bookingSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId
     },
     roomId: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref:"Room"
     },
     alldates: {
         type: [String]

@@ -6,6 +6,7 @@ import dotenv from "dotenv"
 import User from "../models/User.js";
 import { generateToken } from "../utils/jwt.js"
 import Booking from "../models/Booking.js";
+import Hotel from "../models/Hotel.js";
 
 dotenv.config()
 
@@ -96,7 +97,7 @@ export const changeStatus = (req, res, next) => {
 // }
 
 export const paymentChart = async (req, res, next) => {
-  
+
   try {
     const bookings = await Booking.aggregate([
       // {
@@ -104,7 +105,11 @@ export const paymentChart = async (req, res, next) => {
       //     status: 'paid',
       //   },
       // },
-    
+      {
+        $match: {
+          statusChange: 'Booked',
+        }
+      },
 
       {
         $project: {
@@ -114,9 +119,9 @@ export const paymentChart = async (req, res, next) => {
       },
       {
         $group: {
-          _id: { 
+          _id: {
             $dateToString: { format: '%Y-%m', date: '$createdAt' },
-           },
+          },
           totalRoom: { $sum: "$roomTotal" }
         }
       },
@@ -200,6 +205,11 @@ export const bookingChart = async (req, res, next) => {
   try {
     const result = await Booking.aggregate([
       {
+        $match: {
+          statusChange: 'Booked',
+        }
+      },
+      {
         $group: {
           _id: {
             $dateToString: { format: '%Y-%m', date: '$createdAt' },
@@ -227,20 +237,63 @@ export const bookingChart = async (req, res, next) => {
 
 export const bookingDetails = async (req, res, next) => {
   try {
-    const data = await Booking.find().populate("userId")
+    const data = await Booking.find().populate("userId").populate("roomId")
     return res.status(200).send(data)
   } catch (err) {
     next(err)
   }
 }
 
-export const cancleBooking=async(req,res,next)=>{
+export const cancleBooking = async (req, res, next) => {
   try {
-    const data = await Booking.findOne({_id:req.params.id})
-      if(data.statusChange==="Booked"){
-        data.statusChange="Canceled"
-      }
-      data.save()
+    const data = await Booking.findOne({ _id: req.params.id })
+    if (data.statusChange === "Booked") {
+      data.statusChange = "Canceled"
+    }
+    data.save()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const bookingdetailsadmin = async (req, res, next) => {
+  console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+  try {
+    const data = await Booking.findById({ _id: req.params.id }).populate("userId").populate("roomId")
+    console.log(data, "DATA")
+    return res.status(200).send(data)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getFullData = async (req, res, next) => {
+  try {
+    const allUsers = await User.find({ verify: true }).count()
+    const allHotels = await Hotel.find().count()
+    const allOrder = await Booking.find({ statusChange: "Booked" }).count()
+    const total = await Booking.aggregate([
+      {
+        $match: {
+          statusChange: 'Booked',
+        }
+      },
+      {
+        $project: {
+          roomTotal: { $multiply: ["$price", "$numberOfNights"] }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$roomTotal" }
+        }
+      },
+    ])
+    const sales =total[0].total
+    console.log()
+    console.log(allUsers, allHotels, allOrder,sales)
+    return res.status(200).send({allUsers, allHotels, allOrder,sales})
   } catch (err) {
     next(err)
   }
