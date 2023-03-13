@@ -231,10 +231,6 @@ export const bookingChart = async (req, res, next) => {
   }
 }
 
-
-
-
-
 export const bookingDetails = async (req, res, next) => {
   try {
     const data = await Booking.find().populate("userId").populate("roomId")
@@ -257,7 +253,6 @@ export const cancleBooking = async (req, res, next) => {
 }
 
 export const bookingdetailsadmin = async (req, res, next) => {
-  console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
   try {
     const data = await Booking.findById({ _id: req.params.id }).populate("userId").populate("roomId")
     console.log(data, "DATA")
@@ -291,8 +286,6 @@ export const getFullData = async (req, res, next) => {
       },
     ])
     const sales =total[0].total
-    console.log()
-    console.log(allUsers, allHotels, allOrder,sales)
     return res.status(200).send({allUsers, allHotels, allOrder,sales})
   } catch (err) {
     next(err)
