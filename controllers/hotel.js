@@ -229,6 +229,14 @@ export const getCity = async (req, res, next) => {
     }
 }
 
+export const deleteCity=async(req,res,next)=>{
+    try {
+        const delectcity=await City.findByIdAndDelete(req.params.id)
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const getType = async (req, res, next) => {
     try {
         const type = await Hotel.find({ type: req.params.searchType })
