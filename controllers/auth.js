@@ -23,7 +23,7 @@ export const register = async (req, res, next) => {
                 ...req.body,
                 password: hash,
             }).save()
-            const url=`${`https://booknearmeserver.hamrix.store`}/verify?id=${newUser._id}`
+            const url=`${`https://booknearme.hamrix.store`}/verify?id=${newUser._id}`
            await sendEmail(req.body.email, "click to verify your account", url)
 
             // const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, `${process.env.JWT}`)
