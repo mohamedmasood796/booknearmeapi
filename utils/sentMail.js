@@ -9,13 +9,13 @@ export const sendEmail =  async (email, subject, text) => {
       port: 587,
       secure: true,
       auth: {
-        user: `mohamedmasood0075@gmail.com`,
-        pass: `auhcmvijozhaajmx`
+        user:`mohamedmasood0075@gmail.com`,
+        pass:`auhcmvijozhaajmx`
       }
     })
 
     await transporter.sendMail({
-      from: process.env.USER,
+      from:`mohamedmasood0075@gmail.com`,
       to: email,
       subject: subject,
       text: text
